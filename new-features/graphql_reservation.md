@@ -114,6 +114,42 @@ query {
 </details>
 
 <details class="scalar-detail">
+<summary>Call from Python</summary>
+
+```python
+import requests
+
+API_PREFIX = "https://<host>/api/v1"
+TOKEN = "<access token>"
+
+query = """
+query ($id: String!) {
+  reservation(id: $id) {
+    code
+    status
+    payments
+  }
+}
+"""
+
+res = requests.post(
+    f"{API_PREFIX}/graphql",
+    headers={"Authorization": f"Bearer {TOKEN}"},
+    json={"query": query, "variables": {"id": "01K58GMS0W9MB0PQ4Y19EAEBMZ"}},
+    timeout=30,
+)
+body = res.json()
+
+if body.get("errors"):
+    raise RuntimeError(body["errors"][0]["message"])
+
+reservation = body["data"]["reservation"]
+print(reservation["code"], len(reservation["payments"]))
+```
+
+</details>
+
+<details class="scalar-detail">
 <summary>Call from JavaScript</summary>
 
 ```js
@@ -136,15 +172,16 @@ const { data, errors } = await res.json();
 
 Always cheap. Selecting many costs the same as one.
 
-`id` `code` `status` `status_alih_hak` `payment_method` `note` `internal_note` `unit_id` `unit_code` `unit_description` `company_code` `company_name` `project_code` `project_name` `sub_project_code` `sub_project_name` `group_description` `sales_person_name` `sales_person_type` `sales_person_manager_name` `customer_code` `customer_name` `ownership_name` `lead_names` `va_suffix` `sales_amount` `dpp_amount` `ppn_amount` `commitment_fee` `transaction_amount` `paid_amount` `promo_gift_amount` `confirm_1_date` `confirm_2_date` `cancel_date` `reopen_date` `bast_date` `created_at` `created_by` `updated_at` `updated_by`
-
-<details class="scalar-detail">
-<summary>All basic fields</summary>
-
-`opportunity_id` `payment_method_secondary` `is_HOP` `is_VVIP` `is_LPTD` `source_product_info_id` `source_product_info_description` `other_source_product_info` `sales_person_id` `barter_type` `is_sales_group` `is_developer_load` `is_cancel_input` `cancel_input_note` `is_dividend_sales` `is_ppn_incentive` `in_review_date` `in_review_expiry_date` `waiting_for_paid_date` `waiting_for_paid_expiry_date` `confirm_1_expiry_date` `is_deleted` `is_anjak` `commitment_fee_amount` `sales_marketing_amount` `sales_marketing_number_of_payments` `customer_id` `company_id` `profit_center` `is_in_review_extension` `ppjb_generate_date` `project_id` `sub_project_id` `is_initial_confirm_2` `group_id` `bast_datetime` `is_kpr_lunas` `is_kpr_secondary_lunas`
-
-</details>
-
+| Group | Fields |
+| :--- | :--- |
+| Identity | `id` `code` `created_by` `created_at` `updated_by` `updated_at` `is_deleted` |
+| Status and dates | `status` `status_alih_hak` `in_review_date` `in_review_expiry_date` `waiting_for_paid_date` `waiting_for_paid_expiry_date` `confirm_1_date` `confirm_1_expiry_date` `confirm_2_date` `cancel_date` `reopen_date` `ppjb_generate_date` `bast_date` `bast_datetime` |
+| Unit and project | `unit_id` `unit_code` `unit_description` `company_id` `company_code` `company_name` `project_id` `project_code` `project_name` `sub_project_id` `sub_project_code` `sub_project_name` `group_id` `group_description` |
+| Sales | `sales_person_id` `sales_person_name` `sales_person_type` `sales_person_manager_name` `source_product_info_id` `source_product_info_description` `other_source_product_info` |
+| Customer | `customer_id` `customer_code` `customer_name` `ownership_name` `lead_names` `va_suffix` |
+| Amounts | `sales_amount` `dpp_amount` `ppn_amount` `commitment_fee` `commitment_fee_amount` `sales_marketing_amount` `sales_marketing_number_of_payments` `promo_gift_amount` `transaction_amount` `paid_amount` |
+| Flags | `is_HOP` `is_VVIP` `is_LPTD` `is_anjak` `is_sales_group` `is_developer_load` `is_dividend_sales` `is_ppn_incentive` `is_cancel_input` `is_in_review_extension` `is_initial_confirm_2` `is_kpr_lunas` `is_kpr_secondary_lunas` |
+| Other | `opportunity_id` `payment_method` `payment_method_secondary` `barter_type` `note` `internal_note` `cancel_input_note` `profit_center` |
 ### Related data
 
 Each one runs its own query, **only when selected**.
