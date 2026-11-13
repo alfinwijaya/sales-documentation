@@ -9,7 +9,7 @@ Get a reservation by id and choose the fields you want. Only what you select is 
   </div>
   <div class="doc-card">
     <div class="doc-card-label">🧩 One request</div>
-    <div class="doc-card-value">Reservation + payments + files together</div>
+    <div class="doc-card-value">Reservation and any related data, such as payments, prices, customers and files</div>
   </div>
 </div>
 
@@ -58,11 +58,7 @@ Get a reservation by id and choose the fields you want. Only what you select is 
 
 ```graphql
 query {
-  reservation(id: "01K58GMS0W9MB0PQ4Y19EAEBMZ") {
-    code
-    status
-    unit_code
-  }
+  reservation(id: "01K58GMS0W9MB0PQ4Y19EAEBMZ") { code status unit_code }
 }
 ```
 
@@ -77,10 +73,18 @@ query {
 
 ```graphql
 query {
-  reservation(id: "01K58GMS0W9MB0PQ4Y19EAEBMZ") {
-    code
-    payments
-    extension_histories
+  reservation(id: "01K58GMS0W9MB0PQ4Y19EAEBMZ") { code payments extension_histories }
+}
+```
+
+```json
+{
+  "data": {
+    "reservation": {
+      "code": "string",
+      "payments": [{ "id": "string", "amount": 0, "transaction_date": "datetime", "virtual_account_id": "string", "reference_id": "string" }],
+      "extension_histories": [{ "id": "string", "code": "string", "status": "string", "extension_type": "string", "old_expiry_date": "date", "new_expiry_date": "date", "extend_days": 0 }]
+    }
   }
 }
 ```
@@ -94,19 +98,24 @@ query {
 query {
   reservation(id: "01K58GMS0W9MB0PQ4Y19EAEBMZ") {
     id code status unit_code customer_name sales_amount paid_amount
-    reservation_customers
-    reservation_contacts
-    active_unit_prices
-    reservation_ioms
-    reservation_barters
-    attachments
-    virtual_accounts
-    is_outstanding_fine
-    payments
-    extension_histories
-    file_histories
-    confirmation_progress
-    existing_customers
+    reservation_customers reservation_contacts active_unit_prices reservation_ioms
+    reservation_barters attachments virtual_accounts is_outstanding_fine
+    payments extension_histories file_histories confirmation_progress existing_customers
+  }
+}
+```
+
+```json
+{
+  "data": {
+    "reservation": {
+      "id": "string", "code": "string", "status": "string", "unit_code": "string",
+      "customer_name": "string", "sales_amount": 0, "paid_amount": 0,
+      "reservation_customers": [], "reservation_contacts": [], "active_unit_prices": [],
+      "reservation_ioms": [], "reservation_barters": [], "attachments": [], "virtual_accounts": [],
+      "is_outstanding_fine": false, "payments": [], "extension_histories": [],
+      "file_histories": [], "confirmation_progress": {}, "existing_customers": []
+    }
   }
 }
 ```
@@ -114,20 +123,12 @@ query {
 </details>
 
 <details class="scalar-detail">
-<summary>Call from code</summary>
-
-<!-- tabs:start -->
-
-#### **Python**
+<summary>Call from Python</summary>
 
 ```python
 import requests
 
-query = """
-query ($id: String!) {
-  reservation(id: $id) { code status payments }
-}
-"""
+query = "query ($id: String!) { reservation(id: $id) { code status payments } }"
 
 res = requests.post(
     f"{API_PREFIX}/graphql",
@@ -136,30 +137,10 @@ res = requests.post(
     timeout=30,
 )
 body = res.json()
-
 if body.get("errors"):
     raise RuntimeError(body["errors"][0]["message"])
-
 reservation = body["data"]["reservation"]
 ```
-
-#### **JavaScript**
-
-```js
-const query = `
-query ($id: String!) {
-  reservation(id: $id) { code status payments }
-}`;
-
-const res = await fetch(`${API_PREFIX}/graphql`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-  body: JSON.stringify({ query, variables: { id: reservationId } }),
-});
-const { data, errors } = await res.json();
-```
-
-<!-- tabs:end -->
 
 </details>
 
