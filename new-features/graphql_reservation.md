@@ -90,9 +90,13 @@ query {
 <details class="scalar-detail">
 <summary>Full detail screen</summary>
 
+<!-- tabs:start -->
+
+#### **GraphQL**
+
 ```graphql
-query {
-  reservation(id: "01K58GMS0W9MB0PQ4Y19EAEBMZ") {
+query ($id: String!) {
+  reservation(id: $id) {
     id code status unit_code customer_name sales_amount paid_amount
     reservation_customers
     reservation_contacts
@@ -111,12 +115,6 @@ query {
 }
 ```
 
-</details>
-
-### Call from code
-
-<!-- tabs:start -->
-
 #### **Python**
 
 ```python
@@ -128,9 +126,20 @@ TOKEN = "<access token>"
 query = """
 query ($id: String!) {
   reservation(id: $id) {
-    code
-    status
+    id code status unit_code customer_name sales_amount paid_amount
+    reservation_customers
+    reservation_contacts
+    active_unit_prices
+    reservation_ioms
+    reservation_barters
+    attachments
+    virtual_accounts
+    is_outstanding_fine
     payments
+    extension_histories
+    file_histories
+    confirmation_progress
+    existing_customers
   }
 }
 """
@@ -153,18 +162,37 @@ print(reservation["code"], len(reservation["payments"]))
 #### **JavaScript**
 
 ```js
+const query = `
+query ($id: String!) {
+  reservation(id: $id) {
+    id code status unit_code customer_name sales_amount paid_amount
+    reservation_customers
+    reservation_contacts
+    active_unit_prices
+    reservation_ioms
+    reservation_barters
+    attachments
+    virtual_accounts
+    is_outstanding_fine
+    payments
+    extension_histories
+    file_histories
+    confirmation_progress
+    existing_customers
+  }
+}`;
+
 const res = await fetch(`${API_PREFIX}/graphql`, {
   method: "POST",
   headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-  body: JSON.stringify({
-    query: `query ($id: String!) { reservation(id: $id) { code payments } }`,
-    variables: { id: reservationId },
-  }),
+  body: JSON.stringify({ query, variables: { id: reservationId } }),
 });
 const { data, errors } = await res.json();
 ```
 
 <!-- tabs:end -->
+
+</details>
 
 ## Fields
 
