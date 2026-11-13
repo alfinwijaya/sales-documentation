@@ -90,13 +90,9 @@ query {
 <details class="scalar-detail">
 <summary>Full detail screen</summary>
 
-<!-- tabs:start -->
-
-#### **GraphQL**
-
 ```graphql
-query ($id: String!) {
-  reservation(id: $id) {
+query {
+  reservation(id: "01K58GMS0W9MB0PQ4Y19EAEBMZ") {
     id code status unit_code customer_name sales_amount paid_amount
     reservation_customers
     reservation_contacts
@@ -115,39 +111,28 @@ query ($id: String!) {
 }
 ```
 
+</details>
+
+<details class="scalar-detail">
+<summary>Call from code</summary>
+
+<!-- tabs:start -->
+
 #### **Python**
 
 ```python
 import requests
 
-API_PREFIX = "https://<host>/api/v1"
-TOKEN = "<access token>"
-
 query = """
 query ($id: String!) {
-  reservation(id: $id) {
-    id code status unit_code customer_name sales_amount paid_amount
-    reservation_customers
-    reservation_contacts
-    active_unit_prices
-    reservation_ioms
-    reservation_barters
-    attachments
-    virtual_accounts
-    is_outstanding_fine
-    payments
-    extension_histories
-    file_histories
-    confirmation_progress
-    existing_customers
-  }
+  reservation(id: $id) { code status payments }
 }
 """
 
 res = requests.post(
     f"{API_PREFIX}/graphql",
     headers={"Authorization": f"Bearer {TOKEN}"},
-    json={"query": query, "variables": {"id": "01K58GMS0W9MB0PQ4Y19EAEBMZ"}},
+    json={"query": query, "variables": {"id": reservation_id}},
     timeout=30,
 )
 body = res.json()
@@ -156,7 +141,6 @@ if body.get("errors"):
     raise RuntimeError(body["errors"][0]["message"])
 
 reservation = body["data"]["reservation"]
-print(reservation["code"], len(reservation["payments"]))
 ```
 
 #### **JavaScript**
@@ -164,22 +148,7 @@ print(reservation["code"], len(reservation["payments"]))
 ```js
 const query = `
 query ($id: String!) {
-  reservation(id: $id) {
-    id code status unit_code customer_name sales_amount paid_amount
-    reservation_customers
-    reservation_contacts
-    active_unit_prices
-    reservation_ioms
-    reservation_barters
-    attachments
-    virtual_accounts
-    is_outstanding_fine
-    payments
-    extension_histories
-    file_histories
-    confirmation_progress
-    existing_customers
-  }
+  reservation(id: $id) { code status payments }
 }`;
 
 const res = await fetch(`${API_PREFIX}/graphql`, {
