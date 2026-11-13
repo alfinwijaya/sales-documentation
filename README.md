@@ -16,6 +16,18 @@ Welcome to the Sales Administration technical and standard operating procedure d
       </p>
     </div>
   </a>
+
+  <a href="#/new-features/graphql_reservation" style="color: inherit;">
+    <div class="doc-card">
+      <div class="doc-card-value" style="display: flex; justify-content: space-between; align-items: center;">
+        <span>GraphQL Reservation Detail</span>
+        <span class="badge gray">Draft</span>
+      </div>
+      <p style="margin: 8px 0 0 0; font-size: 0.88em; color: var(--text-muted); font-weight: 400;">
+        Fetch only the reservation fields a screen needs, as an alternative to REST include.
+      </p>
+    </div>
+  </a>
 </div>
 
 ## Enhancement
