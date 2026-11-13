@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>API Documentation</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  
+  <!-- Docsify Default Theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  
+  <!-- Custom API & Layout Styles (Cleaned up for standard web) -->
+  <style>
+    :root {
+      --background-secondary: #f8f9fa;
+      --background-modifier-border: #e2e8f0;
+      --text-normal: #334155;
+      --text-muted: #64748b;
+      --interactive-accent: #3b82f6;
+      --font-monospace: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    }
+
+    /* 1. Multi-Column Overview Grid */
+    .doc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .doc-grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .doc-grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    @media (max-width: 600px) {
+      .doc-grid, .doc-grid.cols-2, .doc-grid.cols-4 { grid-template-columns: 1fr; }
+    }
+
+    .doc-card {
+      background: var(--background-secondary);
+      border: 1px solid var(--background-modifier-border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      min-width: 0;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    
+    a { text-decoration: none !important; }
+    a:hover .doc-card {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+      border-color: var(--interactive-accent);
+    }
+
+    .doc-card-label {
+      font-size: 0.75em;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .doc-card-value {
+      font-weight: 600;
+      font-size: 1em;
+      color: var(--text-normal);
+      line-height: 1.5;
+    }
+
+    /* 2. Numbered Timeline Steps */
+    .doc-steps {
+      display: flex;
+      flex-direction: column;
+      margin: 18px 0;
+      padding-left: 4px;
+    }
+    .doc-step {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding-bottom: 18px;
+    }
+    .doc-step:last-child { padding-bottom: 0; }
+    
+    .doc-step:not(:last-child)::before {
+      content: "";
+      position: absolute;
+      left: 13px;
+      top: 30px;
+      bottom: 2px;
+      width: 2px;
+      background: var(--background-modifier-border);
+    }
+    
+    .doc-step-num {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--interactive-accent);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.85em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 4px #ffffff;
+      z-index: 1;
+    }
+    .doc-step-body {
+      background: var(--background-secondary);
+      border: 1px solid var(--background-modifier-border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      flex: 1;
+    }
+    .doc-step-title {
+      font-weight: 600;
+      font-size: 0.98em;
+      margin-bottom: 4px;
+      color: var(--text-normal);
+    }
+    .doc-step-desc {
+      color: var(--text-muted);
+      font-size: 0.92em;
+      line-height: 1.5;
+    }
+
+    /* 3. API Endpoint Cards */
+    .api-card {
+      background: var(--background-secondary);
+      border: 1px solid var(--background-modifier-border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin: 14px 0;
+    }
+    .endpoint-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      border: 1px solid var(--background-modifier-border);
+      border-radius: 7px;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+    }
+    .endpoint-bar code {
+      font-size: 0.95em !important;
+      font-weight: 600 !important;
+      background: transparent !important;
+      color: var(--text-normal) !important;
+      padding: 0 !important;
+    }
+    .api-desc {
+      margin: 0 0 10px 0;
+      color: var(--text-muted);
+      font-size: 0.94em;
+    }
+
+    /* HTTP Methods */
+    .method {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 5px;
+      font-weight: 700;
+      font-size: 0.78em;
+      font-family: var(--font-monospace);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .method.get    { background: rgba(16, 185, 129, 0.16); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.35); }
+    .method.post   { background: rgba(59, 130, 246, 0.16); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.35); }
+    .method.put    { background: rgba(245, 158, 11, 0.16); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); }
+    .method.patch  { background: rgba(168, 85, 247, 0.16); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.35); }
+    .method.delete { background: rgba(239, 68, 68, 0.16);  color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.35); }
+
+    /* 4. Badges */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-family: var(--font-monospace);
+      font-size: 0.82em;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .badge.gray   { background: rgba(107, 114, 128, 0.16); color: #64748b; border: 1px solid rgba(107, 114, 128, 0.35); }
+    .badge.green  { background: rgba(16, 185, 129, 0.16);  color: #10b981; border: 1px solid rgba(16, 185, 129, 0.35); }
+    .badge.yellow { background: rgba(245, 158, 11, 0.16);  color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); }
+    .badge.red    { background: rgba(239, 68, 68, 0.16);   color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.35); }
+    .badge.blue   { background: rgba(59, 130, 246, 0.16);  color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.35); }
+
+    /* 5. Collapsible Detail Accordions */
+    details.scalar-detail {
+      background: var(--background-secondary);
+      border: 1px solid var(--background-modifier-border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin: 10px 0;
+    }
+    details.scalar-detail > summary {
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-normal);
+      outline: none;
+    }
+    details.scalar-detail[open] > summary {
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--background-modifier-border);
+    }
+  </style>
+</head>
+<body>
+  <!-- Docsify mounts here -->
+  <div id="app"></div>
+  
+  <script>
+    window.$docsify = {
+      name: 'API Documentation',
+      repo: '',
+      loadSidebar: false, // Set to true later if you want a sidebar menu!
+      subMaxLevel: 2,
+      auto2top: true
+    }
+  </script>
+  
+  <!-- Docsify Core Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4"></script>
+  
+  <!-- Plugin: Mermaid Diagrams -->
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true });
+    window.mermaid = mermaid;
+  </script>
+  <script src="https://unpkg.com/docsify-mermaid@2.0.1/dist/docsify-mermaid.js"></script>
+  
+  <!-- Plugin: Syntax Highlighting for JSON -->
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
+</body>
+</html>
