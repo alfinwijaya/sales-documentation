@@ -113,8 +113,11 @@ query {
 
 </details>
 
-<details class="scalar-detail">
-<summary>Call from Python</summary>
+### Call from code
+
+<!-- tabs:start -->
+
+#### **Python**
 
 ```python
 import requests
@@ -147,10 +150,7 @@ reservation = body["data"]["reservation"]
 print(reservation["code"], len(reservation["payments"]))
 ```
 
-</details>
-
-<details class="scalar-detail">
-<summary>Call from JavaScript</summary>
+#### **JavaScript**
 
 ```js
 const res = await fetch(`${API_PREFIX}/graphql`, {
@@ -164,7 +164,7 @@ const res = await fetch(`${API_PREFIX}/graphql`, {
 const { data, errors } = await res.json();
 ```
 
-</details>
+<!-- tabs:end -->
 
 ## Fields
 
