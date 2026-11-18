@@ -16,18 +16,6 @@ Welcome to the Sales Administration technical and standard operating procedure d
       </p>
     </div>
   </a>
-
-  <a href="#/new-features/graphql_reservation" style="color: inherit;">
-    <div class="doc-card">
-      <div class="doc-card-value" style="display: flex; justify-content: space-between; align-items: center;">
-        <span>GraphQL Reservation Detail</span>
-        <span class="badge gray">Draft</span>
-      </div>
-      <p style="margin: 8px 0 0 0; font-size: 0.88em; color: var(--text-muted); font-weight: 400;">
-        Fetch only the reservation fields a screen needs, as an alternative to REST include.
-      </p>
-    </div>
-  </a>
 </div>
 
 ## Enhancement
@@ -41,6 +29,30 @@ Welcome to the Sales Administration technical and standard operating procedure d
       </div>
       <p style="margin: 8px 0 0 0; font-size: 0.88em; color: var(--text-muted); font-weight: 400;">
         Workflow approval, scheduled automatic inactivation, and attachment reupload for Master IOM.
+      </p>
+    </div>
+  </a>
+
+  <a href="#/enhancements/graphql_reservation" style="color: inherit;">
+    <div class="doc-card">
+      <div class="doc-card-value" style="display: flex; justify-content: space-between; align-items: center;">
+        <span>GraphQL Reservation Detail</span>
+        <span class="badge gray">Draft</span>
+      </div>
+      <p style="margin: 8px 0 0 0; font-size: 0.88em; color: var(--text-muted); font-weight: 400;">
+        Fetch only the reservation fields a screen needs, as an alternative to REST include.
+      </p>sor
+    </div>
+  </a>
+
+  <a href="#/enhancements/site_plan_mapping" style="color: inherit;">
+    <div class="doc-card">
+      <div class="doc-card-value" style="display: flex; justify-content: space-between; align-items: center;">
+        <span>Site Plan Mapping</span>
+        <span class="badge gray">Draft</span>
+      </div>
+      <p style="margin: 8px 0 0 0; font-size: 0.88em; color: var(--text-muted); font-weight: 400;">
+        Detect units on a site plan PDF as points or outlines, review, and save them to unit coordinates.
       </p>
     </div>
   </a>
